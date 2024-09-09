@@ -34,6 +34,22 @@ export class UsersControllerService {
         });
     }
     /**
+     * 生成验证码
+     * @returns any OK
+     * @throws ApiError
+     */
+    public static captchaUsingGet(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/users/captcha',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
      * 删除用户
      * @param id id
      * @returns number OK

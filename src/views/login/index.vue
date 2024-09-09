@@ -17,64 +17,87 @@
           <el-option label="读者" value="reader"></el-option>
         </el-select>
       </div>
+      <div class="form-group">
+        <label for="captcha">验证码</label>
+        <div class="captcha-container">
+          <input id="captcha" v-model="captcha" required type="text" />
+          <img :src="captchaUrl" alt="验证码" @click="getCaptcha" />
+        </div>
+      </div>
       <button class="login-button" type="submit">Login</button>
       <div class="register-description">
         还没有账号？
         <router-link to="/register">前往注册</router-link>
       </div>
-
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { UsersControllerService } from '../../../generated'
 import router from '@/router'
 import { useUserStore } from '@/stores/counter.ts'
-import {OpenAPI} from '../../../generated'
+import { OpenAPI } from '../../../generated'
 
 const username = ref('')
 const password = ref('')
 const role = ref('')
+const captcha = ref('')
+const captchaUrl = OpenAPI.BASE+'/users/captcha?'+new Date().getTime()
 const userStore = useUserStore()
+
+
 
 const login = async () => {
   const loginVo = {
     username: username.value,
     password: password.value,
-    role: role.value
-  }
+    role: role.value,
+    captcha: captcha.value
+  };
+
   try {
-    const res = await UsersControllerService.loginUsingPost1(loginVo)
-    console.log(res)
-    if (res.code === 200) {
-      ElMessage({
-        message: '登录成功!',
-        type: 'success',
-        duration: 3000
-      })
-      userStore.setUser(res.data) // 存储用户信息
-      OpenAPI.TOKEN = userStore?.user?.token // 设置全局token
-      localStorage.setItem('token', OpenAPI.TOKEN) // 存储token到localStorage
-
-      router.push('/layout')
-
-    } else {
-      ElMessage({
-        message: '用户名或密码错误!',
-        type: 'error',
-        duration: 3000 // Display for 3 seconds
-      })
-    }
+    const res = await UsersControllerService.loginUsingPost1(loginVo);
+    handleLoginResponse(res);
   } catch (error) {
-    console.error('登录出错:', error)
-    alert('登录过程中出现错误,请稍后再试')
+    handleLoginError(error);
   }
-}
+};
+
+const handleLoginResponse = (res) => {
+  if (res.code === 200) {
+    showMessage('登录成功!', 'success');
+    userStore.setUser(res.data); // 存储用户信息
+    OpenAPI.TOKEN = userStore?.user?.token; // 设置全局token
+    localStorage.setItem('token', OpenAPI.TOKEN); // 存储token到localStorage
+    router.push('/layout');
+  } else {
+    handleLoginError(res);
+  }
+};
+
+const handleLoginError = (error) => {
+  if (error.code === 1001) {
+    showMessage('验证码错误!', 'error');
+  } else if (error.code === 400) {
+    showMessage('用户名或密码错误!', 'error');
+  } else {
+    showMessage('登录失败，请稍后再试!', 'error');
+  }
+};
+
+const showMessage = (message, type) => {
+  ElMessage({
+    message,
+    type,
+    duration: 3000
+  });
+};
+
 </script>
 
-<style lang="scss " scoped>
+<style lang="scss" scoped>
 .login-container {
   display: flex;
   justify-content: center;
@@ -85,7 +108,6 @@ const login = async () => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
 }
 
 .login-form {
@@ -137,5 +159,19 @@ const login = async () => {
   margin-top: 1rem;
   font-size: 14px;
   color: #666;
+}
+
+.captcha-container {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-container input {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.captcha-container img {
+  cursor: pointer;
 }
 </style>

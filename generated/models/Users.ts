@@ -16,6 +16,10 @@ export type Users = {
      */
     phone?: string;
     role?: any;
+    /**
+     * Token
+     */
+    token?: string;
     userId?: number;
     username?: string;
 };

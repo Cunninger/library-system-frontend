@@ -71,19 +71,21 @@ const router = createRouter({
 })
 // Navigation guard to check for token
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/', '/register']//  解释：这里是一个数组，里面存放的是不需要token的页面
-  const authRequired = !publicPages.includes(to.path)// 解释：这里是一个布尔值，如果to.path不在publicPages里面，那么authRequired就是true，否则就是false
+  const publicPages = ['/', '/register']
+  const authRequired = !publicPages.includes(to.path)
   const token = OpenAPI.TOKEN || localStorage.getItem('token')
+
   if (authRequired && !token) {
     ElMessage({
       message: '请先登录以访问此页面',
       type: 'warning',
       duration: 3000,
       showClose: true,
-      customClass: 'custom-el-message'  // 可选：用于自定义样式
+      customClass: 'custom-el-message'
     })
-    return next('/')
+    next('/')
+  } else {
+    next()
   }
-  next()
 })
 export default router

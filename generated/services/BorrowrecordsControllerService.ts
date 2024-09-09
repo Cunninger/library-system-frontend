@@ -214,9 +214,9 @@ export class BorrowrecordsControllerService {
      * @throws ApiError
      */
     public static selectPageByUserIdUsingGet(
-      userId: number,
         page: number,
         size: number,
+        userId: number,
     ): CancelablePromise<PageResult_Borrowrecords_> {
         return __request(OpenAPI, {
             method: 'GET',

@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
+import type { BaseResponse_List_Bookclassification_ } from '../models/BaseResponse_List_Bookclassification_';
 import type { Bookclassification } from '../models/Bookclassification';
 import type { PageResult_Bookclassification_ } from '../models/PageResult_Bookclassification_';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -69,12 +71,12 @@ export class BookclassificationControllerService {
     /**
      * 根据分类描述或者分类名查询
      * @param keywords keywords
-     * @returns Bookclassification OK
+     * @returns BaseResponse_List_Bookclassification_ OK
      * @throws ApiError
      */
     public static selectByClassDescriptionOrClassNameUsingGet(
         keywords?: string,
-    ): CancelablePromise<Array<Bookclassification>> {
+    ): CancelablePromise<BaseResponse_List_Bookclassification_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/bookclassification/selectByClassDescriptionOrClassName',
@@ -138,13 +140,13 @@ export class BookclassificationControllerService {
     /**
      * 根据主键更新数据
      * @param record record
-     * @returns number OK
+     * @returns BaseResponse_int_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static updateUsingPut(
         record: Bookclassification,
-    ): CancelablePromise<number | any> {
+    ): CancelablePromise<BaseResponse_int_ | any> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/bookclassification/update',

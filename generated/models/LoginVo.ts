@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LoginVo = {
+    captcha?: string;
     password?: string;
     role?: string;
     username?: string;

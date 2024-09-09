@@ -9,6 +9,8 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { ApiResponse_Readers_ } from './models/ApiResponse_Readers_';
 export type { ApiResponse_Users_ } from './models/ApiResponse_Users_';
+export type { BaseResponse_int_ } from './models/BaseResponse_int_';
+export type { BaseResponse_List_Bookclassification_ } from './models/BaseResponse_List_Bookclassification_';
 export type { Bookclassification } from './models/Bookclassification';
 export type { Books } from './models/Books';
 export type { Borrowrecords } from './models/Borrowrecords';
